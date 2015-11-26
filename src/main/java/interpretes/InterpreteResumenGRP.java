@@ -250,7 +250,7 @@ public class InterpreteResumenGRP implements Interprete<RptAsistenciaResumen> {
     }
 
     private double obtenerHorasLaboradas(List<DetalleAsistencia> detalles) {
-        double totalHoras = 0;
+        int totalHoras = 0;
         System.out.println("ENTRO A HORAS LABORADAS");
         int posicion = 0;
         while (posicion < detalles.size()) {
@@ -287,6 +287,9 @@ public class InterpreteResumenGRP implements Interprete<RptAsistenciaResumen> {
 
             posicion += 2;
         }
-        return totalHoras / (60 * 1000 * 60);
+        int entero = totalHoras / (60 * 1000 * 60);
+        double resto = (totalHoras%(60 * 1000 * 60));
+        double restofinal = (resto/(60*1000))/100;
+        return entero+restofinal;
     }
 }
