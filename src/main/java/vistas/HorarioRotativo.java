@@ -12,6 +12,7 @@ import entidades.Jornada;
 import vistas.modelos.MTHorario;
 import com.personal.utiles.FormularioUtil;
 import com.personal.utiles.ReporteUtil;
+import controladores.AsignacionHorarioControlador;
 import entidades.AsignacionHorario;
 import entidades.GrupoHorario;
 import entidades.Turno;
@@ -52,6 +53,7 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
     private final HorarioControlador horarioControlador;
     private List<Horario> horarioList;
     private Jornada jornadaSeleccionada;
+    private AsignacionHorarioControlador ahc = new AsignacionHorarioControlador();
 
     public HorarioRotativo() {
         initComponents();
@@ -303,7 +305,7 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
         gridBagConstraints.weighty = 0.1;
         pnlDetalle.add(pnlAsignadoA, gridBagConstraints);
 
-        pnlJornadas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle del horario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 0, 12))); // NOI18N
+        pnlJornadas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Jornadas del horario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 0, 12))); // NOI18N
         pnlJornadas.setLayout(new java.awt.GridBagLayout());
 
         tblDetalleHorario.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -318,7 +320,7 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
         pnlJornadas.add(jScrollPane3, gridBagConstraints);
 
         btnAsignar2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        btnAsignar2.setText("Agregar detalles");
+        btnAsignar2.setText("Agregar jornada");
         btnAsignar2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAsignar2ActionPerformed(evt);
@@ -327,7 +329,7 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
         pnlAccionAsignado1.add(btnAsignar2);
 
         btnAsignar3.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        btnAsignar3.setText("Eliminar detalles");
+        btnAsignar3.setText("Eliminar jornada");
         btnAsignar3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAsignar3ActionPerformed(evt);
@@ -519,11 +521,11 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        
+
         int fila = this.tblHorario.getSelectedRow();
-        if(fila != -1){
+        if (fila != -1) {
             this.accion = Controlador.ELIMINAR;
-            
+
             if (FormularioUtil.dialogoConfirmar(this, accion)) {
                 this.horarioControlador.setSeleccionado(this.horarioList.get(fila));
                 if (horarioControlador.accion(accion)) {
@@ -533,7 +535,7 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
                     this.actualizarTabla();
                 }
             }
-            
+
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -541,10 +543,22 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int fila = tblHorario.getSelectedRow();
         if (fila != -1) {
-            this.horarioSeleccionado = horarioList.get(fila);
-            mostrar(this.horarioSeleccionado);
-        }
+            if (chkFiltrar.isSelected()) {
+                TipoFiltro filtro = (TipoFiltro) mcFiltro.getSelectedItem();
+                switch (filtro) {
+                    case POR_EMPLEADO:
+                        this.horarioSeleccionado = horarioList.get(fila);
+                        List<AsignacionHorario> lista = ahc.buscarXEmpleadoxHorario(empleadoSeleccionado, horarioSeleccionado);
+                        this.asignacionHorarioList.clear();
+                        this.asignacionHorarioList.addAll(lista);
+                        this.tblAsignacion.packAll();
+                }
 
+            } else {
+                this.horarioSeleccionado = horarioList.get(fila);
+                mostrar(this.horarioSeleccionado);
+            }
+        }
     }//GEN-LAST:event_tblHorarioMouseReleased
 
     private void chkFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFiltrarActionPerformed
@@ -633,7 +647,7 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        if(hayErrores()){
+        if (hayErrores()) {
             return;
         }
         if (FormularioUtil.dialogoConfirmar(this, accion)) {
@@ -700,8 +714,8 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
     private void btnAsignar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignar3ActionPerformed
         // TODO add your handling code here:
         int fila = tblDetalleHorario.getSelectedRow();
-        
-        if(fila != -1){
+
+        if (fila != -1) {
             Turno turno = this.detalleHorarioList.get(fila);
             this.detalleHorarioList.remove(turno);
             this.horarioControlador.getSeleccionado().getTurnoList().remove(turno);
@@ -886,29 +900,29 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
     private boolean hayErrores() {
         int errores = 0;
         String mensajeError = "Se encontraron los siguientes errores:\n";
-        
-        if(txtCodigo.getText().trim().isEmpty()){
+
+        if (txtCodigo.getText().trim().isEmpty()) {
             errores++;
             mensajeError += "- Debe especificar un código válido\n";
         }
-        if(txtNombre.getText().trim().isEmpty()){
+        if (txtNombre.getText().trim().isEmpty()) {
             errores++;
             mensajeError += "- Debe especificar un nombre válido\n";
         }
-        if(txtDocumento.getText().trim().isEmpty()){
+        if (txtDocumento.getText().trim().isEmpty()) {
             errores++;
             mensajeError += "- Debe especificar un documento válido\n";
         }
-        
-        if(detalleHorarioList.isEmpty()){
+
+        if (detalleHorarioList.isEmpty()) {
             errores++;
             mensajeError += "- Debe asignar al menos un detalle al horario\n";
         }
-        
-        if(errores > 0){
+
+        if (errores > 0) {
             JOptionPane.showMessageDialog(this, mensajeError, "Mensaje del sistema", JOptionPane.WARNING_MESSAGE);
         }
-        
+
         return errores > 0;
     }
 }

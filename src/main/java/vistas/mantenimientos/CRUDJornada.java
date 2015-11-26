@@ -144,7 +144,7 @@ public class CRUDJornada extends javax.swing.JInternalFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(jScrollPane2, gridBagConstraints);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Turnos"));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane3.setViewportView(tblDetalleJornada);
@@ -431,6 +431,7 @@ public class CRUDJornada extends javax.swing.JInternalFrame {
             DetalleJornada dtJornada = this.detalleJornadaList.get(fila);
             DlgDetalleJornada dlgDetalle = new DlgDetalleJornada(this, true);
             dlgDetalle.setDetalleJornada(dtJornada);
+            
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
