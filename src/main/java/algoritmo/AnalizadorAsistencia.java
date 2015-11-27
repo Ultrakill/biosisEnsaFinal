@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public class AnalizadorAsistencia {
 
-    private final boolean boletaExterna = true;
+    private final boolean boletaExterna = false;
     /*
      VALORES PARA COMPARAR EN LA ASISTENCIA
      */
@@ -57,6 +57,7 @@ public class AnalizadorAsistencia {
     public static final int TARDANZA = -1;
     public static final int INASISTENCIA = -2;
     public static final int INCONSISTENCIA = -3;
+    public static final int SUSPENSION = -4;
     /*
      LISTADOS QUE CONTIENEN LA INFORMACION TANTO DE FERIADOS, PERMISOS Y VACACIONES PARA EL EMPLEADO
      */
