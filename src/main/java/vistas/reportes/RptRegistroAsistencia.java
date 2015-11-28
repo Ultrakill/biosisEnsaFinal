@@ -560,6 +560,7 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         // TODO add your handling code here:
         if (!this.asistenciaDetalleList.isEmpty()) {
+            
             imprimir();
         }
 //        Formato formato = obtenerFormato();
@@ -778,6 +779,8 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
     }
 
     private Map<String, Object> obtenerParametros() {
+        DlgAsistenciaOpcion opcionesAdicionales = new DlgAsistenciaOpcion(this, true);
+        Map<Integer,Boolean> mapOpcionesAd = opcionesAdicionales.obtenerOpciones();
         Calendar cal = Calendar.getInstance();
 
         String usuario = UsuarioActivo.getUsuario().getLogin();
@@ -785,6 +788,8 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         Date[] fechas = this.obtenerFechasLimite();
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("usuario", usuario);
+        parametros.put("ver_inconsistencias_como_falta", mapOpcionesAd.get(1));
+        parametros.put("ver_horas_extra", mapOpcionesAd.get(2));
         parametros.put("fecha_inicio", fechas[0]);
         parametros.put("fecha_fin", fechas[1]);
         parametros.put("reporte_ruc", Main.REPORTE_RUC);
