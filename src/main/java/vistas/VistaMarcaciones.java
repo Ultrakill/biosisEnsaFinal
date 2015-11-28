@@ -553,6 +553,7 @@ public class VistaMarcaciones extends javax.swing.JInternalFrame {
                 lista.addAll(listado);
 
                 tblEmpleado.packAll();
+                JOptionPane.showMessageDialog(this, "Busqueda finalizada", "Mensaje del sistema", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
@@ -739,7 +740,7 @@ public class VistaMarcaciones extends javax.swing.JInternalFrame {
                 writer.writeNext(linea, true);
             }
             writer.close();
-
+            JOptionPane.showMessageDialog(this, "CSV generado exitosamente", "Mensaje del sistema", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException ex) {
             Logger.getLogger(VistaMarcaciones.class.getName()).log(Level.WARN, null, ex);
         }

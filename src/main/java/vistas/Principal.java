@@ -59,6 +59,8 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         this.setTitle(Main.APLICACION_TITULO);
         this.jMenuItem6.setVisible(false);
+        this.jMenuItem2.setVisible(false);
+        this.jMenuItem7.setVisible(false);
 //        setIconImage(new ImageIcon(getClass().getResource("iconos/logo.png")).getImage());
         File file = new File(Main.APLICACION_FONDO);
         if (file.exists()) {

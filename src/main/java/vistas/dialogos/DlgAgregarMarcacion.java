@@ -50,7 +50,7 @@ public class DlgAgregarMarcacion extends javax.swing.JDialog {
         super(JOptionPane.getFrameForComponent(owner), modal);
         initComponents();
         //MIENTRAS PERSISTE EL ERROR -->
-        this.jButton2.setEnabled(false);
+//        this.jButton2.setEnabled(false);
         //FIN
         this.readerc = ReaderControlador.getInstance();
         this.eventoc = EventoControlador.getInstance();
@@ -222,10 +222,7 @@ public class DlgAgregarMarcacion extends javax.swing.JDialog {
 
         boolean exito = true;
         int accion = Controlador.NUEVO;
-        eventoList.stream().forEach(e -> {
-            eventoc.setSeleccionado(e);
-            eventoc.accion(accion);
-        });
+        exito = eventoc.guardarLote(eventoList);
 
         if(exito){
             JOptionPane.showMessageDialog(this, "Se generaron los eventos exitosamente", "Mensaje del sistema", JOptionPane.INFORMATION_MESSAGE);

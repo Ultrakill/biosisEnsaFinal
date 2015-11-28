@@ -512,7 +512,23 @@ public class HorarioRotativo extends javax.swing.JInternalFrame {
         if (fila != -1) {
             this.accion = Controlador.MODIFICAR;
             this.horarioControlador.setSeleccionado(this.horarioList.get(fila));
-            this.mostrar(horarioControlador.getSeleccionado());
+//            this.mostrar(horarioControlador.getSeleccionado());
+            
+            if (chkFiltrar.isSelected()) {
+                TipoFiltro filtro = (TipoFiltro) mcFiltro.getSelectedItem();
+                switch (filtro) {
+                    case POR_EMPLEADO:
+                        this.horarioSeleccionado = horarioList.get(fila);
+                        List<AsignacionHorario> lista = ahc.buscarXEmpleadoxHorario(empleadoSeleccionado, horarioSeleccionado);
+                        this.asignacionHorarioList.clear();
+                        this.asignacionHorarioList.addAll(lista);
+                        this.tblAsignacion.packAll();
+                }
+
+            }else {
+                this.horarioSeleccionado = horarioList.get(fila);
+                mostrar(this.horarioSeleccionado);
+            }
             this.controles(accion);
             FormularioUtil.activarComponente(txtCodigo, false);
         }

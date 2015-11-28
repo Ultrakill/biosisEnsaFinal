@@ -88,6 +88,7 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         inicializar();
         bindeoSalvaje();
         controles();
+        this.jButton6.setEnabled(false);
         fuente = new Font(Font.SANS_SERIF, 0, 14);
     }
 
@@ -896,6 +897,7 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         }).collect(Collectors.toList()));
 //        this.asistenciaDetalleList.stream().forEach(asistencia -> System.out.println("--MES: "+asistencia.getMes()+" --"));
         this.tblAsistenciaDetallado.packAll();
+        JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Mensaje del sistema", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private Date[] obtenerFechasLimite() {
