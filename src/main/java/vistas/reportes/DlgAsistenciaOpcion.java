@@ -44,7 +44,7 @@ public class DlgAsistenciaOpcion extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Opciones de impresión");
 
         jPanel1.setLayout(new java.awt.BorderLayout(5, 10));
@@ -53,10 +53,12 @@ public class DlgAsistenciaOpcion extends javax.swing.JDialog {
         pnlOpciones.setLayout(new javax.swing.BoxLayout(pnlOpciones, javax.swing.BoxLayout.Y_AXIS));
 
         chkInconsistencia.setBackground(new java.awt.Color(255, 255, 255));
+        chkInconsistencia.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         chkInconsistencia.setText("Considerar las inconsistencias como faltas");
         pnlOpciones.add(chkInconsistencia);
 
         chkHorasExtra.setBackground(new java.awt.Color(255, 255, 255));
+        chkHorasExtra.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         chkHorasExtra.setText("Ver horas extra");
         pnlOpciones.add(chkHorasExtra);
 
@@ -64,6 +66,7 @@ public class DlgAsistenciaOpcion extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
 
+        jButton1.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         jButton1.setText("Aceptar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
