@@ -280,6 +280,14 @@ public class AnalizadorAsistencia {
         }
     }
 
+    /*
+    
+    @param dia 
+    Busca en el listado de vacaciones (cargadas al inicio del análisis) aquella
+    donde el parámetro día se encuentre entre la fecha de inicio y la fecha de fin<br/>
+    <strong>Comprueba que no esté en un rango de interrupción ni en un rango de 
+    reprogramación</strong>
+     */
     private Vacacion buscarVacacion(Date dia) {
         try {
             Date soloFechaComparacion = FechaUtil.soloFecha(dia);
@@ -288,12 +296,12 @@ public class AnalizadorAsistencia {
                     .filter(vac
                             -> {
                         if (vac.getFechaInicio().compareTo(soloFechaComparacion) <= 0
-                        && vac.getFechaFin().compareTo(soloFechaComparacion) >= 0) {
+                                && vac.getFechaFin().compareTo(soloFechaComparacion) >= 0) {
                             if (vac.isHayReprogramacion()) {
                                 return dia.compareTo(vac.getFechaInterrupcion()) < 0;
                             } else if (vac.isHayInterrupcion()) {
                                 return dia.compareTo(vac.getInterrupcionVacacion().getFechaInicio()) < 0
-                                || dia.compareTo(vac.getInterrupcionVacacion().getFechaFin()) > 0;
+                                        || dia.compareTo(vac.getInterrupcionVacacion().getFechaFin()) > 0;
                             } else {
                                 return true;
                             }
@@ -474,7 +482,7 @@ public class AnalizadorAsistencia {
     private List<Boleta> buscarBoletaXHora(Empleado empleado, Date dia) {
 
         try {
-            
+
             Date soloFechaComparacion = FechaUtil.soloFecha(dia);
 
             for (int i = 0; i < this.boletaXHoraList.size(); i++) {

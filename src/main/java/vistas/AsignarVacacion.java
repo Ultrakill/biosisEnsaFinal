@@ -5,26 +5,23 @@
  */
 package vistas;
 
+import com.personal.utiles.FormularioUtil;
+import com.personal.utiles.ReporteUtil;
+import controladores.CompraVacacionControlador;
 import controladores.Controlador;
 import controladores.EmpleadoControlador;
+import controladores.InterrupcionControlador;
 import controladores.PeriodoControlador;
 import controladores.SaldoVacacionalControlador;
+import controladores.TCAnalisisControlador;
 import controladores.VacacionControlador;
 import entidades.AsignacionPermiso;
+import entidades.CompraVacacion;
+import entidades.InterrupcionVacacion;
 import entidades.Periodo;
 import entidades.SaldoVacacional;
 import entidades.TipoPermiso;
 import entidades.Vacacion;
-import vistas.dialogos.DlgEmpleado;
-import vistas.dialogos.DlgInterrupcionVacacion;
-import vistas.modelos.MTAsignarVacacion;
-import vistas.modelos.MTVacacion;
-import com.personal.utiles.FormularioUtil;
-import com.personal.utiles.ReporteUtil;
-import controladores.CompraVacacionControlador;
-import controladores.TCAnalisisControlador;
-import entidades.CompraVacacion;
-import entidades.InterrupcionVacacion;
 import entidades.escalafon.Empleado;
 import java.awt.Component;
 import java.io.File;
@@ -44,7 +41,12 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import principal.Main;
 import utiles.UsuarioActivo;
+import vistas.dialogos.DlgEmpleado;
+import vistas.dialogos.DlgInterrupcionVacacion;
 import vistas.dialogos.DlgReprogramarVacacion;
+import vistas.modelos.MTAsignarVacacion;
+import vistas.modelos.MTMostrarPeriodos;
+import vistas.modelos.MTVacacion;
 
 /**
  *
@@ -71,9 +73,15 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
 
     public AsignarVacacion() {
         initComponents();
+        jLabel2.setVisible(false);
+        cboPeriodo.setVisible(false);
         reporteador = new ReporteUtil();
         inicializar();
         bindeoSalvaje();
+
+        tbList.setEnabledAt(0, true);
+        tbList.setEnabledAt(1, false);
+//        tbList.getTabComponentAt(1).setVisible(false);
     }
 
     /**
@@ -86,6 +94,8 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        tbList = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         pnlListado = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
@@ -112,6 +122,7 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         cboTamanio = new javax.swing.JComboBox();
         dcFechaInicio1 = new com.toedter.calendar.JDateChooser();
         dcFechaFin1 = new com.toedter.calendar.JDateChooser();
+        jPanel2 = new javax.swing.JPanel();
         pnlDatos = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -140,20 +151,18 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         jPanel5 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblPeriodos = new org.jdesktop.swingx.JXTable();
+        jLabel12 = new javax.swing.JLabel();
 
         setClosable(true);
         setMaximizable(true);
         setTitle("ASIGNAR VACACIONES A EMPLEADO");
-        java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 5, 0, 5, 0};
-        layout.rowHeights = new int[] {0};
-        getContentPane().setLayout(layout);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         pnlListado.setBorder(javax.swing.BorderFactory.createTitledBorder("Vacaciones asignadas"));
-        java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
-        jPanel1Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
-        jPanel1Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0};
-        pnlListado.setLayout(jPanel1Layout);
+        pnlListado.setLayout(new java.awt.GridBagLayout());
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
@@ -394,24 +403,22 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(pnlListado, gridBagConstraints);
+        jPanel1.add(pnlListado, gridBagConstraints);
+
+        tbList.addTab("Vacaciones", jPanel1);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         pnlDatos.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos de vacación"));
-        java.awt.GridBagLayout jPanel2Layout = new java.awt.GridBagLayout();
-        jPanel2Layout.columnWidths = new int[] {0, 0, 0, 0, 0};
-        jPanel2Layout.rowHeights = new int[] {0, 5, 0};
-        pnlDatos.setLayout(jPanel2Layout);
+        pnlDatos.setLayout(new java.awt.GridBagLayout());
 
-        java.awt.GridBagLayout jPanel4Layout = new java.awt.GridBagLayout();
-        jPanel4Layout.columnWidths = new int[] {0, 5, 0, 5, 0};
-        jPanel4Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
-        jPanel4.setLayout(jPanel4Layout);
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jLabel1.setText("Empleado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(jLabel1, gridBagConstraints);
 
@@ -424,7 +431,7 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -434,14 +441,11 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         jLabel4.setText("Fecha de fin:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(jLabel4, gridBagConstraints);
 
-        java.awt.GridBagLayout pnlFHInicioLayout = new java.awt.GridBagLayout();
-        pnlFHInicioLayout.columnWidths = new int[] {0, 5, 0, 5, 0};
-        pnlFHInicioLayout.rowHeights = new int[] {0};
-        pnlFHInicio.setLayout(pnlFHInicioLayout);
+        pnlFHInicio.setLayout(new java.awt.GridBagLayout());
 
         dcFechaFin.setDateFormatString("dd.MM.yyyy");
         dcFechaFin.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -454,15 +458,12 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(pnlFHInicio, gridBagConstraints);
 
-        java.awt.GridBagLayout pnlFHInicio1Layout = new java.awt.GridBagLayout();
-        pnlFHInicio1Layout.columnWidths = new int[] {0, 5, 0, 5, 0};
-        pnlFHInicio1Layout.rowHeights = new int[] {0};
-        pnlFHInicio1.setLayout(pnlFHInicio1Layout);
+        pnlFHInicio1.setLayout(new java.awt.GridBagLayout());
 
         dcFechaInicio.setDateFormatString("dd.MM.yyyy");
         dcFechaInicio.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -475,7 +476,7 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(pnlFHInicio1, gridBagConstraints);
@@ -484,7 +485,7 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         jLabel7.setText("Fecha de inicio:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(jLabel7, gridBagConstraints);
 
@@ -497,14 +498,14 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         jPanel4.add(jButton1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jLabel2.setText("Período:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(jLabel2, gridBagConstraints);
 
@@ -517,14 +518,14 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(cboPeriodo, gridBagConstraints);
 
         txtDocumento.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 23;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel4.add(txtDocumento, gridBagConstraints);
 
@@ -532,16 +533,17 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         jLabel5.setText("Documento de vacación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 23;
         jPanel4.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jLabel6.setText("Vacaciones pedidas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 25;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(jLabel6, gridBagConstraints);
+        jLabel6.setVisible(false);
 
         pnlVacacionesPedidas.setLayout(new java.awt.GridBagLayout());
 
@@ -574,26 +576,29 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 25;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(pnlVacacionesPedidas, gridBagConstraints);
+        pnlVacacionesPedidas.setVisible(false);
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jLabel11.setText("Saldo Vacacional:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 27;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(jLabel11, gridBagConstraints);
+        jLabel11.setVisible(false);
 
         txtSaldo.setColumns(2);
         txtSaldo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         txtSaldo.setText("30");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 27;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel4.add(txtSaldo, gridBagConstraints);
+        txtSaldo.setVisible(false);
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
@@ -617,11 +622,45 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 29;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
         gridBagConstraints.weighty = 0.1;
         jPanel4.add(jPanel5, gridBagConstraints);
+
+        tblPeriodos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tblPeriodos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblPeriodosMouseReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblPeriodos);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 15;
+        gridBagConstraints.gridheight = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(9, 0, 6, 0);
+        jPanel4.add(jScrollPane3, gridBagConstraints);
+
+        jLabel12.setText("Seleccionar Periodo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel4.add(jLabel12, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -641,17 +680,25 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(pnlDatos, gridBagConstraints);
+        jPanel2.add(pnlDatos, gridBagConstraints);
+
+        tbList.addTab("Asignaciones", jPanel2);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(tbList, javax.swing.GroupLayout.DEFAULT_SIZE, 953, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(tbList, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
-        this.accion = 0;
-        this.controles(accion);
-        FormularioUtil.limpiarComponente(this.pnlDatos);
-    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
@@ -659,6 +706,11 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         controlador.prepararCrear();
         this.controles(accion);
         integrantes.clear();
+//        tbList.getTabComponentAt(1).setVisible(true);
+        tbList.setEnabledAt(1, true);
+        tbList.setEnabledAt(0, false);
+        tbList.setSelectedIndex(1);
+
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -674,69 +726,67 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
             }
             this.controles(accion);
             FormularioUtil.activarComponente(txtEmpleadoSeleccionado, false);
+            
+//            tbList.getTabComponentAt(1).setVisible(true);
+            tbList.setEnabledAt(1, true);
+            tbList.setEnabledAt(0, false);
+            tbList.setSelectedIndex(1);
         }
+
     }//GEN-LAST:event_btnModificarActionPerformed
 
-//    private final SaldoVacacionalControlador svc = new SaldoVacacionalControlador();
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        if (erroresFormulario()) {
-            return;
-        }
-        if (FormularioUtil.dialogoConfirmar(this, accion)) {
-            Vacacion seleccionada = this.controlador.getSeleccionado();
+        int fila = tblTabla.getSelectedRow();
+        if (fila != -1) {
+            if (JOptionPane.showConfirmDialog(null, "¿Desea Eliminar el Item?", "Mensaje del Sistema", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                this.accion = Controlador.ELIMINAR;
 
-//            FormularioUtil.convertirMayusculas(this.pnlDatos);
-            if (accion == Controlador.NUEVO) {
-                seleccionada.setEmpleado(empleadoSeleccionado);
-            }
-            if (seleccionada.getEmpleado() != null) {
-                System.out.println("Hay empleado");
+                controlador.setSeleccionado(this.listado.get(fila));
+                Vacacion vacacion = this.listado.get(fila);
+                listado.remove(vacacion);
+                controlador.accion(accion);
+                actualizarTabla();
             } else {
-                System.out.println("No hay empleado");
-            }
-//            if(accion == Controlador.MODIFICAR){
-//                seleccionada.setEmpleado(empleado);
-//            }
-            seleccionada.setFechaInicio(dcFechaInicio.getDate());
-            seleccionada.setFechaFin(dcFechaFin.getDate());
-            seleccionada.setHayInterrupcion(false);
-            seleccionada.setDocumento(txtDocumento.getText());
-            seleccionada.setPeriodo(periodoList.get(cboPeriodo.getSelectedIndex()));
-
-            if (controlador.accion(accion)) {
-                List<String> dni = new ArrayList<>();
-                dni.add(seleccionada.getEmpleado().getNroDocumento());
-                retrocederTiempo(dni, seleccionada.getFechaInicio());
-                SaldoVacacional sv = buscarCrear(empleadoSeleccionado, seleccionada.getPeriodo());
-                int[] saldos = obtenerSaldos(empleadoSeleccionado,seleccionada.getPeriodo());
-                sv.setDiasRestantes(30 - (saldos[0] + saldos[1] + saldos[2]));
-                sv.setLunesViernes(saldos[0]);
-                sv.setSabado(saldos[1]);
-                sv.setDomingo(saldos[2]);
-                svc.modificar(sv);
-
-                FormularioUtil.mensajeExito(this, accion);
-                System.out.println("SELECCION: " + seleccionada.getId());
-                this.accion = 0;
-                FormularioUtil.limpiarComponente(this.pnlDatos);
-                this.controles(accion);
-                this.actualizarTabla();
-                if (FormularioUtil.dialogoConfirmar(this, 4)) {
-                    imprimirBoleta(seleccionada);
-                }
-            } else {
-                FormularioUtil.mensajeError(this, accion);
+                JOptionPane.showMessageDialog(null, "Item no eliminado", "Mensaje del Sistema", JOptionPane.ERROR_MESSAGE);
             }
 
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un Item", "Mensaje del Sistema", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }//GEN-LAST:event_jButton6ActionPerformed
 
-    private final TCAnalisisControlador tcac = new TCAnalisisControlador();
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int fila = tblTabla.getSelectedRow();
+        if (fila != -1) {
+            Vacacion vacacion = this.listado.get(fila);
+            this.imprimirBoleta(vacacion);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void retrocederTiempo(List<String> dnis, Date fechaInicio) {
-        tcac.retrocederTiempo(dnis, fechaInicio);
-    }
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int fila = tblTabla.getSelectedRow();
+        if (fila != -1) {
+            Vacacion vacacion = this.listado.get(fila);
+            DlgInterrupcionVacacion interrupcion = new DlgInterrupcionVacacion(this, vacacion);
+            interrupcion.setVisible(true);
+            this.buscarVacacion();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        int fila = tblTabla.getSelectedRow();
+        if (fila != -1) {
+            Vacacion vacacion = this.listado.get(fila);
+            DlgReprogramarVacacion reprogramar = new DlgReprogramarVacacion(this, vacacion);
+            reprogramar.setVisible(true);
+            this.buscarVacacion();
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     private void tblTablaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTablaMouseReleased
         // TODO add your handling code here:
         int fila = tblTabla.getSelectedRow();
@@ -746,19 +796,6 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
             mostrar(vacacion);
         }
     }//GEN-LAST:event_tblTablaMouseReleased
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        DlgEmpleado dialogo = new DlgEmpleado(this);
-        empleadoSeleccionado = dialogo.getSeleccionado();
-        if (empleadoSeleccionado != null) {
-            txtEmpleadoSeleccionado.setText(
-                    empleadoSeleccionado.getPaterno()
-                    + " " + empleadoSeleccionado.getMaterno()
-                    + " " + empleadoSeleccionado.getNombre());
-            actualizarResumenVacaciones(empleadoSeleccionado);
-        }
-
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtEmpleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmpleadoKeyReleased
         // TODO add your handling code here:
@@ -825,67 +862,136 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         this.actualizarControlesNavegacion();
     }//GEN-LAST:event_cboTamanioActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void txtEmpleadoSeleccionadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmpleadoSeleccionadoActionPerformed
         // TODO add your handling code here:
-        int fila = tblTabla.getSelectedRow();
-        if (fila != -1) {
-            Vacacion vacacion = this.listado.get(fila);
-            this.imprimirBoleta(vacacion);
+    }//GEN-LAST:event_txtEmpleadoSeleccionadoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DlgEmpleado dialogo = new DlgEmpleado(this);
+        empleadoSeleccionado = dialogo.getSeleccionado();
+        if (empleadoSeleccionado != null) {
+            txtEmpleadoSeleccionado.setText(
+                    empleadoSeleccionado.getPaterno()
+                    + " " + empleadoSeleccionado.getMaterno()
+                    + " " + empleadoSeleccionado.getNombre());
+            actualizarResumenVacaciones(empleadoSeleccionado);
+            bindeoSalvaje2();
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        if (erroresFormulario()) {
+            return;
+        }
+        if (FormularioUtil.dialogoConfirmar(this, accion)) {
+            Vacacion seleccionada = this.controlador.getSeleccionado();
+
+            //            FormularioUtil.convertirMayusculas(this.pnlDatos);
+            if (accion == Controlador.NUEVO) {
+                seleccionada.setEmpleado(empleadoSeleccionado);
+            }
+            if (seleccionada.getEmpleado() != null) {
+                System.out.println("Hay empleado");
+            } else {
+                System.out.println("No hay empleado");
+            }
+            //            if(accion == Controlador.MODIFICAR){
+            //                seleccionada.setEmpleado(empleado);
+            //            }
+            seleccionada.setFechaInicio(dcFechaInicio.getDate());
+            seleccionada.setFechaFin(dcFechaFin.getDate());
+            seleccionada.setHayInterrupcion(false);
+            seleccionada.setDocumento(txtDocumento.getText());
+
+            //Asignacion del periodo de donde se obtendran los dias.
+            int filaPeriodos = tblPeriodos.getSelectedRow();
+            if (filaPeriodos != -1) {
+                String[] periodoTabla = lista.get(filaPeriodos);
+                System.out.println("Periodo: " + periodoTabla[2].substring(0, 4));
+                int numPeriodo = Integer.parseInt(periodoTabla[2].substring(0, 4));
+                Periodo periodoObtenido = pc.buscarPeriodoxAnio(numPeriodo).get(0);
+
+//                long diferencia = dcFechaFin.getDate().getTime() - dcFechaInicio.getDate().getTime();
+//                int diferenciaDias = (int) (diferencia / (1000 * 60 * 60 * 24));
+//
+//                int diasDisponibles = Integer.parseInt(periodoTabla[4]);
+//
+//                if (diasDisponibles >= diferenciaDias) {
+                pc.setSeleccionado(periodoObtenido);
+//                } else {
+//
+//                }
+
+            }
+
+            seleccionada.setPeriodo(pc.getSeleccionado());
+
+            if (controlador.accion(accion)) {
+                List<String> dni = new ArrayList<>();
+                dni.add(seleccionada.getEmpleado().getNroDocumento());
+                retrocederTiempo(dni, seleccionada.getFechaInicio());
+                SaldoVacacional sv = buscarCrear(empleadoSeleccionado, seleccionada.getPeriodo());
+                int[] saldos = obtenerSaldos(empleadoSeleccionado, seleccionada.getPeriodo());
+                sv.setDiasRestantes(30 - (saldos[0] + saldos[1] + saldos[2]));
+                sv.setLunesViernes(saldos[0]);
+                sv.setSabado(saldos[1]);
+                sv.setDomingo(saldos[2]);
+                svc.modificar(sv);
+
+                FormularioUtil.mensajeExito(this, accion);
+                System.out.println("SELECCION: " + seleccionada.getId());
+                this.accion = 0;
+//                FormularioUtil.limpiarComponente(this.pnlDatos);
+                this.controles(accion);
+                this.actualizarTabla();
+                if (FormularioUtil.dialogoConfirmar(this, 4)) {
+                    imprimirBoleta(seleccionada);
+                }
+            } else {
+                FormularioUtil.mensajeError(this, accion);
+            }
+//            tbList.getTabComponentAt(1).setVisible(false);
+            tbList.setEnabledAt(0, true);
+            tbList.setEnabledAt(1, false);
+//            tbList.setSelectedIndex(0);
+//            lista.clear();
+            bindeoSalvaje2();
+            FormularioUtil.activarComponente(btnCancelar, true);
+            FormularioUtil.activarComponente(btnGuardar, true);
+
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.accion = 0;
+        this.controles(accion);
+        FormularioUtil.limpiarComponente(this.pnlDatos);
+        tbList.setEnabledAt(0, true);
+//        tbList.getTabComponentAt(1).setVisible(false);
+        tbList.setEnabledAt(1, false);
+        tbList.setSelectedIndex(0);
+        if(lista != null){
+            lista.clear();
+        }
+        
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void tblPeriodosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPeriodosMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblPeriodosMouseReleased
 
     private void cboPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboPeriodoActionPerformed
         // TODO add your handling code here:
         actualizarResumenVacaciones(empleadoSeleccionado);
     }//GEN-LAST:event_cboPeriodoActionPerformed
 
-    private void txtEmpleadoSeleccionadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmpleadoSeleccionadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmpleadoSeleccionadoActionPerformed
+    private final TCAnalisisControlador tcac = new TCAnalisisControlador();
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        int fila = tblTabla.getSelectedRow();
-        if(fila != -1){
-            Vacacion vacacion = this.listado.get(fila);
-            DlgInterrupcionVacacion interrupcion = new DlgInterrupcionVacacion(this, vacacion);
-            interrupcion.setVisible(true);
-            this.buscarVacacion();
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        int fila = tblTabla.getSelectedRow();
-        if(fila != -1){
-            Vacacion vacacion = this.listado.get(fila);
-            DlgReprogramarVacacion reprogramar = new DlgReprogramarVacacion(this, vacacion);            
-            reprogramar.setVisible(true);
-            this.buscarVacacion();
-        }
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        int fila = tblTabla.getSelectedRow();
-        if (fila != -1) {
-            if (JOptionPane.showConfirmDialog(null, "¿Desea Eliminar el Item?", "Mensaje del Sistema", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                this.accion = Controlador.ELIMINAR;
-                
-                controlador.setSeleccionado(this.listado.get(fila));
-                Vacacion vacacion = this.listado.get(fila);
-                listado.remove(vacacion);
-                controlador.accion(accion);
-                actualizarTabla();
-            }else {
-                    JOptionPane.showMessageDialog(null, "Item no eliminado", "Mensaje del Sistema", JOptionPane.ERROR_MESSAGE);
-                }
-
-        }else{
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un Item", "Mensaje del Sistema", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton6ActionPerformed
-
+    private void retrocederTiempo(List<String> dnis, Date fechaInicio) {
+        tcac.retrocederTiempo(dnis, fechaInicio);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
@@ -913,6 +1019,7 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -921,10 +1028,13 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
     private org.jdesktop.swingx.JXBusyLabel lblBusqueda;
     private javax.swing.JPanel pnlDatos;
     private javax.swing.JPanel pnlFHInicio;
@@ -933,6 +1043,8 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnlNavegacion;
     private javax.swing.JPanel pnlVacacionesPedidas;
     private javax.swing.JSpinner spPagina;
+    private javax.swing.JTabbedPane tbList;
+    private org.jdesktop.swingx.JXTable tblPeriodos;
     private org.jdesktop.swingx.JXTable tblTabla;
     private javax.swing.JTextField txtDocumento;
     private javax.swing.JTextField txtDom;
@@ -953,7 +1065,6 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         txtDocumento.setText(vacacion.getDocumento());
         cargarSaldoVacacional(vacacion.getPeriodo(), e);
 //        actualizarResumenVacaciones(e);
-        
 
     }
 
@@ -989,6 +1100,194 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         });
 
         actualizarTabla();
+    }
+
+    List<String[]> lista;
+
+    private void bindeoSalvaje2() {
+        lista = new ArrayList<>();
+        lista = ObservableCollections.observableList(lista);
+//        periodoList = pc.buscarTodosOrden();
+
+        integrantes = ObservableCollections.observableList(new ArrayList<Empleado>());
+
+//        String[] columnasIntegrantes = {"Nro Documento", "Empleado"};
+//        JComboBoxBinding bindingPeriodo = SwingBindings.createJComboBoxBinding(AutoBinding.UpdateStrategy.READ, periodoList, cboPeriodo);
+//        bindingPeriodo.bind();
+        crearPeriodos(empleadoSeleccionado);
+        MTMostrarPeriodos mt = new MTMostrarPeriodos(lista);
+//        MTEmpleado mtIntegrantes = new MTEmpleado(integrantes, columnasIntegrantes);
+        tblPeriodos.setModel(mt);
+//        tblTabla.setModel(mtIntegrantes);
+
+//        cboPeriodo.setRenderer(new DefaultListCellRenderer() {
+//
+//            @Override
+//            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+//                if (value instanceof Periodo) {
+//                    value = ((Periodo) value).getAnio();
+//                }
+//                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//            }
+//
+//        });
+//        actualizarTabla();
+    }
+
+    InterrupcionControlador ic = new InterrupcionControlador();
+
+    private void crearPeriodos(Empleado empleado) {
+
+        //Creamos la lista que tendrá los datos de los periodos del empleado
+        String[] fila;
+        Date inicio = empleado.getContratoList().get(0).getFechaInicio();
+
+        //Guardamos la fecha pivot, que es la fecha de inicio de contrato.
+        Calendar inicioPeriodo = Calendar.getInstance();
+        inicioPeriodo.setTime(inicio);
+
+        Calendar inicioContrato = Calendar.getInstance();
+        inicioContrato.setTime(inicio);
+
+        //Fecha a comparar para obetener las listas de vacaciones entre rangos.
+        Calendar suma = Calendar.getInstance();
+        suma.setTime(inicio);
+//                suma.add(Calendar.YEAR, 1);
+
+        //Fecha actual hasta la que realizamos la consulta.
+        Date fechaActual = new Date();
+        Calendar actual = Calendar.getInstance();
+        actual.setTime(fechaActual);
+
+        VacacionControlador vacaciones = new VacacionControlador();
+
+        //Variables para las consultas de rangos.
+        Calendar fechaInicio = Calendar.getInstance();
+        fechaInicio.setTime(inicio);
+
+//        Date fInicio = inicioPeriodo.getTime();
+//        Date fFin;
+        Calendar parametro1 = Calendar.getInstance();
+        Calendar parametro2 = Calendar.getInstance();
+        boolean flag = false;
+
+        //Loop principal para analizar periodo por periodo todas las vacaciones.
+        for (int i = inicioPeriodo.get(Calendar.YEAR); i <= actual.get(Calendar.YEAR); i++) {
+            fila = new String[5];
+
+            //Obetenemos los primeros datos que son repetitivos en las filas.
+            fila[0] = empleado.getFichaLaboral().getCodigoTrabajador();
+            fila[1] = empleado.getNombreCompleto();
+
+            //Se suma 1 al año para calcular el primer periodo y asi sucesivamente.
+            if (i != actual.get(Calendar.YEAR)) {
+                suma.set(Calendar.YEAR, i + 1);
+                if (i == fechaInicio.get(Calendar.YEAR)) {
+                    i = i + 1;
+                }
+                if (i + 1 == actual.get(Calendar.YEAR)) {
+                    flag = true;
+                }
+            } else {
+
+                if (inicioContrato.get(Calendar.DAY_OF_YEAR) > actual.get(Calendar.DAY_OF_YEAR)) {
+                    break;
+//                    menor = true;
+                }
+            }
+//            fFin = suma.getTime();
+
+            System.out.println("Inicio analisis: " + i + " - Fin analisis: " + suma.get(Calendar.YEAR));
+
+            System.out.println("periodo analizado: " + i + " - Periodo Actual: " + actual.get(Calendar.YEAR) + " - Dia del año del contrato: " + inicioPeriodo.get(Calendar.DAY_OF_YEAR) + " - Dia del año Actual: " + actual.get(Calendar.DAY_OF_YEAR));
+            //Preguntamos si esta en e ultimo año del calculo para saber si la fecha es posterior a la de su contrato (en mes - dia)
+//            if (i == actual.get(Calendar.YEAR) && actual.get(Calendar.DAY_OF_YEAR) > inicioPeriodo.get(Calendar.DAY_OF_YEAR)) {
+//
+//                long saldo = 30;
+//                inicioPeriodo.set(Calendar.YEAR, i);
+//
+//                //Obtenemos todas las vacaciones del rango de fechas
+//                List<Vacacion> vac = vacaciones.buscarXEmpleadoEntreFecha(empleado, inicioPeriodo.getTime(), actual.getTime());
+//                long saldoARestar = 0;
+//
+//                //Si es que hay vacaciones para analizar, obtenemos cuanto representan en dias.
+//                if (vac != null) {
+//
+//                    for (Vacacion listaDias : vac) {
+//                        long diferencia = listaDias.getFechaFin().getTime() - listaDias.getFechaInicio().getTime();
+//                        long dias = diferencia / (1000 * 60 * 60 * 24);
+//                        saldoARestar = saldoARestar + dias;
+//
+//                    }
+//                    saldo = saldo - saldoARestar;
+//                }
+//
+//                fila[2] = (i + 1) + " - " + (i + 2);
+//                fila[3] = saldoARestar + "";
+//                fila[4] = saldo + "";
+//                lista.add(fila);
+//
+//                //Esta es la parte del algoritmo que mas se repite, de la misma forma calcula en dias las vacaciones gozadas.
+//            } else 
+//                if (i != actual.get(Calendar.YEAR)) {
+
+            parametro1.setTime(inicioPeriodo.getTime());
+            parametro2.setTime(suma.getTime());
+
+            long saldo = 30;
+            
+            //CALCULAMOS LOS DIAS DISPONIBLES EN EL ULTIMO AÑO.
+            if (flag) {
+                System.out.println("ENTRO ULTIMO AÑO");
+                int diasTranscurridos = actual.get(Calendar.DAY_OF_YEAR);
+                int operacion = (diasTranscurridos * 30) / 365;
+                saldo = operacion;
+                flag = false;
+            }
+            Periodo periodoObtenido = pc.buscarPeriodoxAnio(inicioPeriodo.get(Calendar.YEAR)).get(0);
+            List<Vacacion> vac = vacaciones.buscarXPeriodoxEmpleado(periodoObtenido, empleado);
+            long saldoARestar = 0;
+            long interrupcionRestar = 0;
+            if (vac != null) {
+
+                
+
+                for (Vacacion listaDias : vac) {
+                    if (listaDias.isHayInterrupcion()) {
+//                        long diasInterrupcionSuma = 0;
+                        
+                        List<InterrupcionVacacion> interrupciones = ic.buscarInterrupcion(listaDias);
+                        
+                        for (InterrupcionVacacion interrupcion : interrupciones) {
+
+                            long diferencia = interrupcion.getFechaFin().getTime() - interrupcion.getFechaInicio().getTime();
+                            long diasInterrupcion = (diferencia) / (1000 * 60 * 60 * 24);
+                            diasInterrupcion = diasInterrupcion + 1;
+                            interrupcionRestar = interrupcionRestar + diasInterrupcion;
+                        }
+                    }
+                    long diferencia = listaDias.getFechaFin().getTime() - listaDias.getFechaInicio().getTime();
+                    long dias = (diferencia) / (1000 * 60 * 60 * 24);
+                    dias = dias + 1;
+                    saldoARestar = saldoARestar + (dias);
+
+                }
+                saldo = saldo - saldoARestar + interrupcionRestar;
+            }
+
+            fila[2] = i + " - " + (i + 1);
+            fila[3] = (saldoARestar - interrupcionRestar)+"";
+            fila[4] = saldo + "";
+            lista.add(fila);
+
+//            }
+            //Añadimos anuestra lista la fila con la informacion trabajada.
+            //La fecha inicial toma los valores del año +1 para calcular el siguiente periodo y asi sucesivamente.
+            inicioPeriodo.set(Calendar.YEAR, i + 1);
+//            fInicio = inicioPeriodo.getTime();
+
+        }
+
     }
 
     private void actualizarTabla() {
@@ -1072,7 +1371,8 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         Date fechaFin = dcFechaFin1.getDate();
         listado.clear();
         List<Vacacion> lista = this.listar(empleadoBusqueda, fechaInicio, fechaFin, paginaActual, tamanioPagina);
-//        System.out.println("LISTA: " + lista.size());
+        System.out.println("EMPLEADO: " + empleadoBusqueda);
+        System.out.println("LISTA: " + lista.size());
         listado.addAll(lista);
 
         tblTabla.packAll();
@@ -1199,10 +1499,11 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         sv = svc.buscarXPeriodo(empleado, periodo);
         return sv;
     }
-    
+
     private boolean erroresFormulario() {
         int errores = 0;
         Date fechaInicio = dcFechaInicio.getDate();
+        int fila = tblPeriodos.getSelectedRow();
 
         String mensaje = "";
 
@@ -1210,6 +1511,27 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         if (fechaInicio.compareTo(fechaFin) > 0) {
             errores++;
             mensaje = ">La fecha de inicio debe ser menor que la fecha de fin\n";
+        }
+
+        if (fila == -1) {
+            errores++;
+            mensaje = ">No ha seleccionado ningún periodo\n";
+        }
+
+        int filaPeriodos = tblPeriodos.getSelectedRow();
+        if (filaPeriodos != -1) {
+            String[] periodoTabla = lista.get(filaPeriodos);
+
+            long diferencia = dcFechaFin.getDate().getTime() - dcFechaInicio.getDate().getTime();
+            int diferenciaDias = (int) (diferencia / (1000 * 60 * 60 * 24));
+
+            int diasDisponibles = Integer.parseInt(periodoTabla[4]);
+
+            if (diasDisponibles < diferenciaDias) {
+                errores++;
+                mensaje = ">Saldo de dias disponibles insuficiente\n";
+            }
+
         }
 //        //Traemos los dnis de los empleados
 ////        String empleadoPrueba = this.controlador.getSeleccionado().getEmpleado();
@@ -1248,19 +1570,21 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         int sabado = 0;
         int domingo = 0;
 
-        for (Vacacion vacacion : vacaciones) {
-            Date fechaInicio = vacacion.getFechaInicio();
-            Date fechaFin = vacacion.isHayInterrupcion() ? vacacion.getFechaInterrupcion() : vacacion.getFechaFin();
+        if (vacaciones != null) {
+            for (Vacacion vacacion : vacaciones) {
+                Date fechaInicio = vacacion.getFechaInicio();
+                Date fechaFin = vacacion.isHayInterrupcion() ? vacacion.getFechaInterrupcion() : vacacion.getFechaFin();
 
-            while (fechaInicio.compareTo(fechaFin) <= 0) {
-                cal.setTime(fechaInicio);
-                if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                while (fechaInicio.compareTo(fechaFin) <= 0) {
+                    cal.setTime(fechaInicio);
+                    if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 //                    sabadoADomingo++;
-                } else {
-                    lunesViernes++;
+                    } else {
+                        lunesViernes++;
+                    }
+                    cal.add(Calendar.DAY_OF_MONTH, 1);
+                    fechaInicio = cal.getTime();
                 }
-                cal.add(Calendar.DAY_OF_MONTH, 1);
-                fechaInicio = cal.getTime();
             }
         }
         int division = lunesViernes / 5;
@@ -1292,17 +1616,13 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
                     if (interrupcion.getFechaInicio().compareTo(iterador.getTime()) <= 0
                             && interrupcion.getFechaFin().compareTo(iterador.getTime()) >= 0) {
                         //no pasa nada
-                    } else {
-                        if (iterador.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-                                && iterador.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                            lunesViernes++;
-                        }
-                    }
-                } else {
-                    if (iterador.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+                    } else if (iterador.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
                             && iterador.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                         lunesViernes++;
                     }
+                } else if (iterador.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+                        && iterador.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    lunesViernes++;
                 }
                 iterador.add(Calendar.DATE, 1);
             }
@@ -1319,8 +1639,8 @@ public class AsignarVacacion extends javax.swing.JInternalFrame {
         txtDom.setText(dom + "");
         txtSaldo.setText(saldo + "");
     }
-    
-    private void buscarVacacion(){
+
+    private void buscarVacacion() {
         System.out.println("BUSCAR");
         lblBusqueda.setBusy(true);
         paginaActual = 1;

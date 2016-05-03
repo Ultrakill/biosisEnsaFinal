@@ -16,6 +16,8 @@ import entidades.InterrupcionVacacion;
 import entidades.Periodo;
 import entidades.SaldoVacacional;
 import entidades.escalafon.Empleado;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +42,9 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         super(JOptionPane.getFrameForComponent(padre), true);
         initComponents();
         this.vacacion = vacacion;
+        DateFormat formato= new SimpleDateFormat("dd/MM/yyyy");
+        lblFechaInicio.setText(formato.format(this.vacacion.getFechaInicio()));
+        lblFechaFin.setText(formato.format(this.vacacion.getFechaFin()));
         dcFechaInicioInterrupcion.setMinSelectableDate(vacacion.getFechaInicio());
         dcFechaInicioInterrupcion.setMaxSelectableDate(vacacion.getFechaFin());
         dcFechaFinInterrupcion.setMinSelectableDate(vacacion.getFechaInicio());
@@ -68,8 +73,6 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtEmpleado = new javax.swing.JTextField();
-        dcFechaInicio = new com.toedter.calendar.JDateChooser();
-        dcFechaFin = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtMotivo = new javax.swing.JTextArea();
@@ -77,6 +80,8 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         dcFechaFinInterrupcion = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        lblFechaInicio = new javax.swing.JLabel();
+        lblFechaFin = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar interrupción");
@@ -85,7 +90,7 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Definir fecha de interrupción"));
         jPanel1.setToolTipText("");
         java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
-        jPanel1Layout.columnWidths = new int[] {0, 5, 0};
+        jPanel1Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
         jPanel1Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
         jPanel1.setLayout(jPanel1Layout);
 
@@ -126,7 +131,7 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jLabel2.setText("Fecha de inicio interrupción::");
+        jLabel2.setText("Fecha de inicio interrupción: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -145,28 +150,11 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtEmpleado, gridBagConstraints);
-
-        dcFechaInicio.setDateFormatString("dd.MM.yyyy");
-        dcFechaInicio.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel1.add(dcFechaInicio, gridBagConstraints);
-
-        dcFechaFin.setDateFormatString("dd.MM.yyyy");
-        dcFechaFin.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel1.add(dcFechaFin, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jLabel4.setText("Motivo:");
@@ -184,6 +172,7 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -195,6 +184,7 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(dcFechaInicioInterrupcion, gridBagConstraints);
@@ -204,25 +194,36 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(dcFechaFinInterrupcion, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jLabel5.setText("Fecha de inicio:");
+        jLabel5.setText("Vacaciones del:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel5, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jLabel6.setText("Fecha de fin:");
+        jLabel6.setText(" al ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
         jPanel1.add(jLabel6, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 3.0;
+        jPanel1.add(lblFechaInicio, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 3.0;
+        jPanel1.add(lblFechaFin, gridBagConstraints);
 
         getContentPane().add(jPanel1);
 
@@ -243,6 +244,7 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
             interrupcion.setMotivo(txtMotivo.getText());
 
             vacacion.setInterrupcionVacacion(interrupcion);
+            vacacion.setHayInterrupcion(true);
             vc.setSeleccionado(vacacion);
             if (vc.accion(accion)) {
                 this.dispose();
@@ -261,9 +263,7 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.toedter.calendar.JDateChooser dcFechaFin;
     private com.toedter.calendar.JDateChooser dcFechaFinInterrupcion;
-    private com.toedter.calendar.JDateChooser dcFechaInicio;
     private com.toedter.calendar.JDateChooser dcFechaInicioInterrupcion;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -276,6 +276,8 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblFechaFin;
+    private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JTextField txtEmpleado;
     private javax.swing.JTextArea txtMotivo;
     // End of variables declaration//GEN-END:variables
@@ -283,12 +285,12 @@ public class DlgInterrupcionVacacion extends javax.swing.JDialog {
     private void controles() {
         Empleado empleado = vacacion.getEmpleado();
         txtEmpleado.setText(empleado.getNombreCompleto());
-        dcFechaInicio.setDate(vacacion.getFechaInicio());
-        dcFechaFin.setDate(vacacion.getFechaFin());
+//        dcFechaInicio.setDate(vacacion.getFechaInicio());
+//        dcFechaFin.setDate(vacacion.getFechaFin());
 
         FormularioUtil.activarComponente(txtEmpleado, false);
-        FormularioUtil.activarComponente(dcFechaInicio, false);
-        FormularioUtil.activarComponente(dcFechaFin, false);
+//        FormularioUtil.activarComponente(dcFechaInicio, false);
+//        FormularioUtil.activarComponente(dcFechaFin, false);
     }
 
     private final Calendar cal = Calendar.getInstance();

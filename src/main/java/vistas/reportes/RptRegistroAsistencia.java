@@ -3,20 +3,18 @@ package vistas.reportes;
 import algoritmo.AnalizadorAsistencia;
 import algoritmo.Interprete;
 import com.personal.utiles.FechaUtil;
-import controladores.DetalleGrupoControlador;
-import controladores.EmpleadoControlador;
-import controladores.GrupoHorarioControlador;
-import controladores.PeriodoControlador;
-import entidades.DetalleGrupoHorario;
-import entidades.GrupoHorario;
-import entidades.Periodo;
-import vistas.dialogos.DlgEmpleado;
-import vistas.modelos.MTEmpleado;
 import com.personal.utiles.FormularioUtil;
 import com.personal.utiles.ReporteUtil;
 import com.personal.utiles.ReporteUtil.Formato;
 import controladores.AreaEmpleadoControlador;
+import controladores.DetalleGrupoControlador;
+import controladores.EmpleadoControlador;
+import controladores.GrupoHorarioControlador;
 import controladores.MarcacionControlador;
+import controladores.PeriodoControlador;
+import entidades.DetalleGrupoHorario;
+import entidades.GrupoHorario;
+import entidades.Periodo;
 import entidades.asistencia.Asistencia;
 import entidades.asistencia.DetalleAsistencia;
 import entidades.escalafon.AreaEmpleado;
@@ -42,22 +40,30 @@ import java.util.stream.Collectors;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.observablecollections.ObservableCollections;
 import org.jdesktop.swingbinding.JComboBoxBinding;
-import org.jdesktop.swingbinding.SwingBindings;
-import utiles.UsuarioActivo;
-import vistas.dialogos.DlgOficina;
-import javax.swing.JPanel;
 import org.jdesktop.swingbinding.JTableBinding;
+import org.jdesktop.swingbinding.SwingBindings;
 import principal.Main;
+import pruebas.Exportador;
+import utiles.ButtonTabComponent;
 import utiles.HerramientaGeneral;
+import utiles.UsuarioActivo;
 import vistas.dialogos.DlgAgregarMarcacion;
+import vistas.dialogos.DlgEmpleado;
 import vistas.dialogos.DlgMarcacionesDiarias;
+import vistas.dialogos.DlgOficina;
 import vistas.modelos.MTAsistencia;
+import vistas.modelos.MTEmpleado;
 
 /**
  *
@@ -83,12 +89,14 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         pc = new PeriodoControlador();
         dfFecha = new SimpleDateFormat("dd/MM/yyyy");
         reporteador = new ReporteUtil();
+        jButton1.setVisible(false);
 //        FormularioUtil.modeloSpinnerFechaHora(spFechaInicio, "dd/MM/yyyy");
 //        FormularioUtil.modeloSpinnerFechaHora(spFechaFin, "dd/MM/yyyy");
         inicializar();
         bindeoSalvaje();
         controles();
-        this.jButton6.setEnabled(false);
+        lblCargando.setVisible(false);
+        this.btnMarcacionManual.setEnabled(false);
         fuente = new Font(Font.SANS_SERIF, 0, 14);
     }
 
@@ -126,19 +134,22 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         btnOficina = new javax.swing.JButton();
         radTodos = new javax.swing.JRadioButton();
         pnlBotones = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        btnGenerarReporte = new javax.swing.JButton();
         pnlReporte = new javax.swing.JPanel();
         pnlTab = new javax.swing.JTabbedPane();
         tabDetallado = new javax.swing.JPanel();
         pnlOpciones = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnMarcacionManual = new javax.swing.JButton();
+        btnExcel = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblAsistenciaDetallado = new org.jdesktop.swingx.JXTable();
         pnlCerrarTab = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblCargando = new org.jdesktop.swingx.JXBusyLabel();
         grpRango.add(radPorFecha);
         grpRango.add(radMes);
         grpRango.add(radAnio);
@@ -290,8 +301,9 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tblTabla);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -307,7 +319,7 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         pnlEmpleados.add(btnAgregar, gridBagConstraints);
 
@@ -320,7 +332,7 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         pnlEmpleados.add(btnQuitar, gridBagConstraints);
 
@@ -381,18 +393,18 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
 
         pnlBotones.setLayout(new java.awt.GridBagLayout());
 
-        jButton2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jButton2.setText("GENERAR REPORTE");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerarReporte.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnGenerarReporte.setText("GENERAR REPORTE");
+        btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnGenerarReporteActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        pnlBotones.add(jButton2, gridBagConstraints);
+        pnlBotones.add(btnGenerarReporte, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -400,6 +412,8 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         getContentPane().add(pnlBotones, gridBagConstraints);
 
         pnlReporte.setLayout(new java.awt.BorderLayout());
+
+        pnlTab.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tabDetallado.setLayout(new java.awt.BorderLayout());
 
@@ -414,14 +428,23 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         });
         pnlOpciones.add(jButton4);
 
-        jButton6.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
-        jButton6.setText("Marcación manual");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnMarcacionManual.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        btnMarcacionManual.setText("Marcación manual");
+        btnMarcacionManual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
-        pnlOpciones.add(jButton6);
+        pnlOpciones.add(btnMarcacionManual);
+
+        btnExcel.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        btnExcel.setText("Exportar Excel");
+        btnExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExceljButton5ActionPerformed(evt);
+            }
+        });
+        pnlOpciones.add(btnExcel);
 
         btnImprimir.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         btnImprimir.setText("Imprimir");
@@ -474,6 +497,12 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         });
         pnlCerrarTab.add(jButton1);
 
+        jLabel1.setText("    ");
+        pnlCerrarTab.add(jLabel1);
+
+        lblCargando.setText("Cargando resultados...");
+        pnlCerrarTab.add(lblCargando);
+
         pnlReporte.add(pnlCerrarTab, java.awt.BorderLayout.PAGE_START);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -487,11 +516,87 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        generarReporte();
+    private void agregarPestaña(String titulo, Component ventana) {
+        int index = pnlTab.indexOfComponent(ventana);
+        if (index >= 0) {
+            pnlTab.setSelectedIndex(index);
+        } else {
+            ButtonTabComponent tab = new ButtonTabComponent(pnlTab);
+            pnlTab.add(titulo, ventana);
+            pnlTab.setTabComponentAt(pnlTab.getTabCount() - 1, tab);
+            pnlTab.setSelectedIndex(pnlTab.getTabCount() - 1);
+        }
+    }
+
+    private class GenerarReporte extends SwingWorker<Double, Void> {
+
+        @Override
+        protected Double doInBackground() throws Exception {
+            FormularioUtil.activarComponente(pnlTab, false);
+            FormularioUtil.activarComponente(pnlEmpleados, false);
+            FormularioUtil.activarComponente(pnlRango, false);
+            FormularioUtil.activarComponente(pnlCerrarTab, false);
+            FormularioUtil.activarComponente(btnGenerarReporte, false);
+            lblCargando.setEnabled(true);
+            lblCargando.setVisible(true);
+            lblCargando.setBusy(true);
+            generarReporte();
+            return 0.0;
+        }
+
+        @Override
+        protected void done() {
+            FormularioUtil.activarComponente(pnlTab, true);
+            FormularioUtil.activarComponente(pnlEmpleados, true);
+            FormularioUtil.activarComponente(pnlRango, true);
+            FormularioUtil.activarComponente(pnlCerrarTab, true);
+            FormularioUtil.activarComponente(btnGenerarReporte, true);
+            FormularioUtil.activarComponente(btnMarcacionManual, false);
+            lblCargando.setBusy(false);
+            lblCargando.setVisible(false);
+        }
+
+    }
+
+    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
+        // TODO add your handling code here:       
+
+        Date hoy = new Date();
+        boolean flag = false;
+        if (!radMes.isSelected()) {
+            if (!radAnio.isSelected()) {
+                if (!radPorFecha.isSelected()) {
+                    JOptionPane.showMessageDialog(this, "Debe seleccionar algún rango.\n", "Mensaje del sistema", JOptionPane.ERROR_MESSAGE);
+                    if (dcFechaInicio.getDate() == null || dcFechaFin.getDate() == null) {
+                        JOptionPane.showMessageDialog(this, "El rango está incompleto o no se ha seleccionado adecuadamente.\n", "Mensaje del sistema", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else if (dcFechaInicio.getDate() != null && dcFechaFin.getDate() != null) {
+                    if (radPorFecha.isSelected() && (dcFechaInicio.getDate().compareTo(hoy) <= 0 && dcFechaFin.getDate().compareTo(hoy) <= 0)) {
+                        GenerarReporte reporte = new GenerarReporte();
+                        reporte.execute();
+                    } else {
+                        flag = true;
+                        JOptionPane.showMessageDialog(this, "La fecha seleccionada es superior a la actual\n", "Mensaje del sistema", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                }else{
+                    JOptionPane.showMessageDialog(this, "El rango está incompleto o no se ha seleccionado adecuadamente.\n", "Mensaje del sistema", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                if (!flag) {
+                    GenerarReporte reporte = new GenerarReporte();
+                    reporte.execute();
+                }
+            }
+        } else {
+            if (!flag) {
+                GenerarReporte reporte = new GenerarReporte();
+                reporte.execute();
+            }
+        }
+
 //        imprimir();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnGenerarReporteActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
@@ -560,7 +665,7 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         // TODO add your handling code here:
         if (!this.asistenciaDetalleList.isEmpty()) {
-            
+
             imprimir();
         }
 //        Formato formato = obtenerFormato();
@@ -620,22 +725,61 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
                         });
                     });
             if (!marcacionList.isEmpty()) {
-                System.out.println("MARCACION LIST: "+marcacionList.size());
+                System.out.println("MARCACION LIST: " + marcacionList.size());
                 DlgAgregarMarcacion agregarMarcacion = new DlgAgregarMarcacion(marcacionList, this, true);
                 agregarMarcacion.setVisible(true);
                 this.generarReporte();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "No existen eventos por subsanar", "Mensaje del sistema", JOptionPane.INFORMATION_MESSAGE);
             }
 
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void btnExceljButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExceljButton5ActionPerformed
+        // TODO add your handling code here:
+        if (this.tblAsistenciaDetallado.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "No hay datos en la tabla para exportar.", "BCO",
+                    JOptionPane.INFORMATION_MESSAGE);
+            this.btnExcel.grabFocus();
+            return;
+        }
+        JFileChooser chooser = new JFileChooser();
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de excel", "xls");
+        chooser.setFileFilter(filter);
+        chooser.setDialogTitle("Guardar archivo");
+        chooser.setMultiSelectionEnabled(false);
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            List<JTable> tb = new ArrayList<>();
+            List<String> nom = new ArrayList<>();
+            tb.add(tblAsistenciaDetallado);
+            nom.add("Detalle de Asistencia");
+            String excel = chooser.getSelectedFile().toString().concat(".xls");
+            try {
+                Date[] fechasLimite = this.obtenerFechasLimite();
+                Exportador e = new Exportador(new File(excel), tb, nom, fechasLimite[0], fechasLimite[1]);
+                if (e.exportar()) {
+                    JOptionPane.showMessageDialog(null, "Los datos fueron exportados a excel.", "BCO",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Hubo un error" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnExceljButton5ActionPerformed
+
     private Departamento oficinaSeleccionada;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnExcel;
+    private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JButton btnImprimir;
+    private javax.swing.JButton btnMarcacionManual;
     private javax.swing.JButton btnOficina;
     private javax.swing.JButton btnQuitar;
     private javax.swing.JComboBox cboGrupoHorario;
@@ -647,12 +791,12 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
     private javax.swing.ButtonGroup grpRango;
     private javax.swing.ButtonGroup grpSeleccion;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
+    private org.jdesktop.swingx.JXBusyLabel lblCargando;
     private javax.swing.JPanel pnlBotones;
     private javax.swing.JPanel pnlCerrarTab;
     private javax.swing.JPanel pnlEmpleados;
@@ -774,13 +918,14 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         Map<String, Object> parametros = this.obtenerParametros();
         Component report = reporteador.obtenerReporte(this.asistenciaDetalleList, archivo, parametros);
 //        pnlTab.removeTabAt(0);
-        pnlTab.add("Vista previa " + pnlTab.getTabCount(), report);
+        agregarPestaña("Vista previa", report);
+//        pnlTab.add("Vista previa " + pnlTab.getTabCount(), report);
         pnlTab.setSelectedIndex(pnlTab.getTabCount() - 1);
     }
 
     private Map<String, Object> obtenerParametros() {
         DlgAsistenciaOpcion opcionesAdicionales = new DlgAsistenciaOpcion(this, true);
-        Map<Integer,Boolean> mapOpcionesAd = opcionesAdicionales.obtenerOpciones();
+        Map<Integer, Boolean> mapOpcionesAd = opcionesAdicionales.obtenerOpciones();
         Calendar cal = Calendar.getInstance();
 
         String usuario = UsuarioActivo.getUsuario().getLogin();
@@ -882,7 +1027,12 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
     private List<Asistencia> asistenciaList;
     private Interprete interpreteResumen = new InterpreteResumenGRP();
 
+    public static boolean band = false;
+
     private void generarReporte() {
+
+        band = false;
+
         List<Empleado> empleados = obtenerDNI();
         Date[] fechasLimite = this.obtenerFechasLimite();
         asistenciaList = analisis.analizarAsistencia(empleados, fechasLimite[0], fechasLimite[1]);
@@ -902,6 +1052,7 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         }).collect(Collectors.toList()));
 //        this.asistenciaDetalleList.stream().forEach(asistencia -> System.out.println("--MES: "+asistencia.getMes()+" --"));
         this.tblAsistenciaDetallado.packAll();
+        band = true;
         JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Mensaje del sistema", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -972,7 +1123,8 @@ public class RptRegistroAsistencia extends javax.swing.JInternalFrame {
         Map<String, Object> parametros = this.obtenerParametros();
         Component report = reporteador.obtenerReporte(interpreteResumen.interpretar(asistenciaList), resumenFile, parametros);
 //        pnlTab.removeTabAt(0);
-        pnlTab.add("Resumen " + pnlTab.getTabCount(), report);
+//        pnlTab.add("Resumen " + pnlTab.getTabCount(), report);
+        agregarPestaña("Vista previa resumen", report);
         pnlTab.setSelectedIndex(pnlTab.getTabCount() - 1);
     }
 }

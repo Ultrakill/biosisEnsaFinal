@@ -138,6 +138,15 @@ public class VacacionControlador extends Controlador<Vacacion> {
         List<Vacacion> vacacion = this.getDao().buscar(jpql, mapa);
         return vacacion;
     }
+    
+    public List<Vacacion> buscarXPeriodoxEmpleado(Periodo periodo, Empleado empleado) {
+        String jpql = "SELECT v FROM Vacacion v WHERE v.empleado = :empleado AND v.periodo = :periodo AND v.hayReprogramacion = 0";
+        Map<String, Object> mapa = new HashMap<>();
+        mapa.put("periodo", periodo);
+        mapa.put("empleado", empleado);
+        List<Vacacion> vacacion = this.getDao().buscar(jpql, mapa);
+        return vacacion;
+    }
 
     public List<Vacacion> buscarXEmpleadoXPeriodoNoReprogramacion(Empleado empleado, Periodo periodo) {
         String jpql = "SELECT v FROM Vacacion v WHERE v.empleado = :dni AND v.periodo = :periodo AND v.vacacionOrigen IS NULL";
@@ -153,6 +162,7 @@ public class VacacionControlador extends Controlador<Vacacion> {
                 + "WHERE "
                 + "v.empleado = :empleado AND "
                 + "((v.fechaInicio <= :fechaInicio AND v.fechaFin >= :fechaInicio) OR (v.fechaInicio BETWEEN :fechaInicio AND :fechaFin)) "
+                + " AND v.hayReprogramacion = 0 "
                 + "ORDER BY v.fechaInicio";
         Map<String, Object> mapa = new HashMap<>();
         mapa.put("empleado", empleado);

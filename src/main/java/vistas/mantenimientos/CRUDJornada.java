@@ -375,7 +375,7 @@ public class CRUDJornada extends javax.swing.JInternalFrame {
 
             if (accion == Controlador.NUEVO) {
                 seleccionada.setCodigo(txtCodigo.getText());
-            }
+            }           
             seleccionada.setNombre(txtNombre.getText());
             seleccionada.setDescripcion(txtDescripcion.getText());
             
@@ -532,6 +532,8 @@ public class CRUDJornada extends javax.swing.JInternalFrame {
         txtDescripcion.setText(seleccionado.getDescripcion());
         this.detalleJornadaList.clear();
         this.detalleJornadaList.addAll(seleccionado.getDetalleJornadaList());
+        
+        
 //        spDesdeHE.setValue(seleccionado.getDesdeHE());
 //        spRefrigerioHS.setValue(seleccionado.getRefrigerioHS());
 //        spRefrigerioHE.setValue(seleccionado.getRefrigerioHE());

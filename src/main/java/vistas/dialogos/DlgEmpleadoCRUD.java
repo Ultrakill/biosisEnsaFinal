@@ -1424,6 +1424,13 @@ public class DlgEmpleadoCRUD extends javax.swing.JDialog {
             empleado.setTipoDocumento((TipoDocumento) cboTipoDocumento.getSelectedItem());
 
             FichaGeneral fgen = empleado.getFichaGeneral();
+            if (fgen == null) {
+                FichaGeneral fichaGeneralCreada = new FichaGeneral();
+                empleado.setFichaGeneral(fichaGeneralCreada);
+                fichaGeneralCreada.setEmpleado(empleado);
+                fgen = empleado.getFichaGeneral();
+            }
+
             fgen.setDireccion(txtDireccion.getText());
             fgen.setEmail(txtEmail.getText().toLowerCase());
             fgen.setEstadoCivil(cboEstadoCivil.getSelectedItem().toString().charAt(0));
@@ -1487,43 +1494,45 @@ public class DlgEmpleadoCRUD extends javax.swing.JDialog {
         //DATOS GENERALES
         FichaGeneral general = empleado.getFichaGeneral();
 
-        char sexo = general.getEstadoCivil();
-        System.out.println("ESTADO C: " + sexo);
+        if (general != null) {
 
-        switch (sexo) {
-            case 'C':
-                cboEstadoCivil.setSelectedIndex(0);
-                break;
-            case 'S':
-                cboEstadoCivil.setSelectedIndex(1);
-                break;
-            case 'V':
-                cboEstadoCivil.setSelectedIndex(2);
-                break;
-            case 'D':
-                cboEstadoCivil.setSelectedIndex(3);
-                break;
+            char sexo = general.getEstadoCivil();
+            System.out.println("ESTADO C: " + sexo);
+
+            switch (sexo) {
+                case 'C':
+                    cboEstadoCivil.setSelectedIndex(0);
+                    break;
+                case 'S':
+                    cboEstadoCivil.setSelectedIndex(1);
+                    break;
+                case 'V':
+                    cboEstadoCivil.setSelectedIndex(2);
+                    break;
+                case 'D':
+                    cboEstadoCivil.setSelectedIndex(3);
+                    break;
+            }
+
+            cboNivelEducativo.setSelectedItem(
+                    general.getNivelEducativo() == null
+                    ? cboNivelEducativo.getSelectedItem()
+                    : general.getNivelEducativo()
+            );
+
+            txtEmail.setText(general.getEmail() == null ? "" : general.getEmail());
+
+            this.nacionalidadSeleccion = general.getNacionalidad();
+            mostrarNacionalidad(nacionalidadSeleccion);
+
+            this.ubigeoSeleccion = general.getUbigeoResidencia();
+            mostrarUbigeo(ubigeoSeleccion);
+            txtTelefono1.setText(general.getTelefono1());
+            txtTelefono2.setText(general.getTelefono2());
+            cboTipoVia.setSelectedItem(general.getTipoVia());
+            cboTipoZona.setSelectedItem(general.getTipoZona());
+            txtDireccion.setText(general.getDireccion());
         }
-
-        cboNivelEducativo.setSelectedItem(
-                general.getNivelEducativo() == null
-                        ? cboNivelEducativo.getSelectedItem()
-                        : general.getNivelEducativo()
-        );
-
-        txtEmail.setText(general.getEmail() == null ? "" : general.getEmail());
-
-        this.nacionalidadSeleccion = general.getNacionalidad();
-        mostrarNacionalidad(nacionalidadSeleccion);
-
-        this.ubigeoSeleccion = general.getUbigeoResidencia();
-        mostrarUbigeo(ubigeoSeleccion);
-        txtTelefono1.setText(general.getTelefono1());
-        txtTelefono2.setText(general.getTelefono2());
-        cboTipoVia.setSelectedItem(general.getTipoVia());
-        cboTipoZona.setSelectedItem(general.getTipoZona());
-        txtDireccion.setText(general.getDireccion());
-
         //DATOS FICHA LABORAL
         FichaLaboral laboral = empleado.getFichaLaboral();
 //        cboOficina.setSelectedItem(laboral.getArea());
@@ -1590,7 +1599,6 @@ public class DlgEmpleadoCRUD extends javax.swing.JDialog {
             errores++;
         }
 
-
         if (errores > 0) {
             JOptionPane.showMessageDialog(this, mensajeError, "Mensaje del sistema", JOptionPane.WARNING_MESSAGE);
         }
@@ -1617,7 +1625,9 @@ public class DlgEmpleadoCRUD extends javax.swing.JDialog {
             for (Contrato contratosList : listaContratos) {
 
                 if (contratosList.getFechaFin() == null) {
-                    conteo++;
+                    if (dcFechaInicio.getDate().compareTo(contratosList.getFechaInicio()) != 0) {
+                        conteo++;
+                    }
                 } else if (((dcFechaInicio.getDate().compareTo(contratosList.getFechaInicio()) <= 0) & (dcFechaFin.getDate().compareTo(contratosList.getFechaInicio()) >= 0)) || ((dcFechaInicio.getDate().compareTo(contratosList.getFechaInicio()) >= 0) & (dcFechaInicio.getDate().compareTo(contratosList.getFechaFin()) <= 0))) {
                     erroresContratos++;
                 }
@@ -1626,7 +1636,9 @@ public class DlgEmpleadoCRUD extends javax.swing.JDialog {
             for (AreaEmpleado areaList : listaAreas) {
 
                 if (areaList.getFechaFin() == null) {
-                    conteo++;
+                    if (dtFechaInicio.getDate().compareTo(areaList.getFechaInicio()) != 0) {
+                        conteo++;
+                    }
                 } else if (((dtFechaInicio.getDate().compareTo(areaList.getFechaInicio()) <= 0) & (dtFechaFin.getDate().compareTo(areaList.getFechaInicio()) >= 0)) || ((dtFechaInicio.getDate().compareTo(areaList.getFechaInicio()) >= 0) & (dtFechaInicio.getDate().compareTo(areaList.getFechaFin()) <= 0))) {
                     erroresContratos++;
                 }
@@ -1651,9 +1663,11 @@ public class DlgEmpleadoCRUD extends javax.swing.JDialog {
                 }
             }
         } else if (tipo.equals("Area")) {
-            if (FechaUtil.soloFecha(dtFechaFin.getDate()).compareTo(FechaUtil.soloFecha(dtFechaInicio.getDate())) <= 0) {
-                mensajeError += "- La fecha de fin debe ser mayor a la fecha de inicio\n";
-                errores++;
+            if (dtFechaFin.getDate() != null) {
+                if (FechaUtil.soloFecha(dtFechaFin.getDate()).compareTo(FechaUtil.soloFecha(dtFechaInicio.getDate())) <= 0) {
+                    mensajeError += "- La fecha de fin debe ser mayor a la fecha de inicio\n";
+                    errores++;
+                }
             }
 
         }

@@ -381,7 +381,7 @@ public class DlgDatosEmpleado extends javax.swing.JDialog {
         List<Contrato> contratos = cc.buscarXNombrexFechaASC(empleado);
         if(!contratos.isEmpty()){
             contratoVigente = contratos.get(0);
-            dtFechaContrato.setDate(empleado.getContratoList().get(0).getFechaInicio());
+            dtFechaContrato.setDate(contratos.get(0).getFechaInicio());
         }
         
         

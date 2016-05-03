@@ -46,9 +46,9 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
         this.vacacion = vacacion;
         ec = new EmpleadoControlador();
         vc = new VacacionControlador();
-        dcInterrupcionDesde.setMinSelectableDate(vacacion.getFechaInicio());
-        dcInterrupcionDesde.setMaxSelectableDate(vacacion.getFechaFin());
-        dcInicioReprogramacion.setMinSelectableDate(vacacion.getFechaFin());
+//        dcInterrupcionDesde.setMinSelectableDate(vacacion.getFechaInicio());
+//        dcInterrupcionDesde.setMaxSelectableDate(vacacion.getFechaFin());
+//        dcFechaHasta.setMinSelectableDate(vacacion.getFechaFin());
         controles();
         this.setLocationRelativeTo(padre);
     }
@@ -72,7 +72,7 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         txtEmpleado = new javax.swing.JTextField();
         dcInterrupcionDesde = new com.toedter.calendar.JDateChooser();
-        dcInicioReprogramacion = new com.toedter.calendar.JDateChooser();
+        dcFechaHasta = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDocumento = new javax.swing.JTextArea();
@@ -126,7 +126,7 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
         jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jLabel2.setText("Interrupción desde:");
+        jLabel2.setText("Inicio reprogramación: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -134,7 +134,7 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
         jPanel1.add(jLabel2, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jLabel3.setText("Inicio reprogramación:");
+        jLabel3.setText("Fin reprogramación: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -159,17 +159,17 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(dcInterrupcionDesde, gridBagConstraints);
 
-        dcInicioReprogramacion.setDateFormatString("dd.MM.yyyy");
-        dcInicioReprogramacion.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        dcFechaHasta.setDateFormatString("dd.MM.yyyy");
+        dcFechaHasta.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel1.add(dcInicioReprogramacion, gridBagConstraints);
+        jPanel1.add(dcFechaHasta, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        jLabel5.setText("Motivo o documento de reprogramación:");
+        jLabel5.setText("Motivo: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -199,12 +199,13 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
         // TODO add your handling code here:
         int accion = Controlador.MODIFICAR;
         if (FormularioUtil.dialogoConfirmar(this, accion)) {
-            Date fechaFin = obtenerFechaFin(vacacion.getEmpleado(), this.dcInterrupcionDesde.getDate(), this.vacacion.getFechaFin(), dcInicioReprogramacion.getDate());
+//            Date fechaFin = obtenerFechaFin(vacacion.getEmpleado(), this.dcInterrupcionDesde.getDate(), this.vacacion.getFechaFin(), dcInicioReprogramacion.getDate());
+            
             
             
             Vacacion reprogramacion = new Vacacion();
-            reprogramacion.setFechaInicio(dcInicioReprogramacion.getDate());
-            reprogramacion.setFechaFin(fechaFin);
+            reprogramacion.setFechaInicio(dcInterrupcionDesde.getDate());
+            reprogramacion.setFechaFin(dcFechaHasta.getDate());
             reprogramacion.setDocumento(txtDocumento.getText());
             reprogramacion.setEmpleado(this.vacacion.getEmpleado());
             reprogramacion.setVacacionOrigen(this.vacacion);
@@ -212,7 +213,7 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
             
             this.vacacion.setVacacionReprogramacion(reprogramacion);
             this.vacacion.setFechaInterrupcion(dcInterrupcionDesde.getDate());
-//            vacacion.setHayReprogramacion(true);
+            this.vacacion.setHayReprogramacion(true);
 //            vacacion.setFechaInterrupcion(dcInterrupcionDesde.getDate());
             vc.setSeleccionado(vacacion);
             if (vc.accion(accion)) {
@@ -232,7 +233,7 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.toedter.calendar.JDateChooser dcInicioReprogramacion;
+    private com.toedter.calendar.JDateChooser dcFechaHasta;
     private com.toedter.calendar.JDateChooser dcInterrupcionDesde;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -251,11 +252,11 @@ public class DlgReprogramarVacacion extends javax.swing.JDialog {
         Empleado empleado = vacacion.getEmpleado();
         txtEmpleado.setText(empleado.getNombreCompleto());
         dcInterrupcionDesde.setDate(vacacion.getFechaInicio());
-        dcInicioReprogramacion.setDate(vacacion.getFechaFin());
+        dcFechaHasta.setDate(vacacion.getFechaFin());
 
         FormularioUtil.activarComponente(txtEmpleado, false);
         FormularioUtil.activarComponente(dcInterrupcionDesde, true);
-        FormularioUtil.activarComponente(dcInicioReprogramacion, true);
+        FormularioUtil.activarComponente(dcFechaHasta, true);
     }
 
     private final Calendar cal = Calendar.getInstance();

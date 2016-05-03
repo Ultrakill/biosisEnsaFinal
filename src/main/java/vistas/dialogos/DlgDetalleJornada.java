@@ -47,6 +47,11 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
         spEntrada = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         spEntradaTolerancia = new javax.swing.JSpinner();
+        pnlEntradaMarcacion2 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        spEntradaDesde1 = new javax.swing.JSpinner();
+        jLabel9 = new javax.swing.JLabel();
+        spEntradaHasta1 = new javax.swing.JSpinner();
         pnlEntradaMarcacion = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         spEntradaDesde = new javax.swing.JSpinner();
@@ -61,6 +66,11 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         spSalidaHasta = new javax.swing.JSpinner();
         chkDiaSiguiente = new javax.swing.JCheckBox();
+        pnlEntradaMarcacion3 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        spSalidaDesde1 = new javax.swing.JSpinner();
+        jLabel11 = new javax.swing.JLabel();
+        spSalidaHasta1 = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -75,8 +85,8 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
 
         pnlEntrada.setBorder(javax.swing.BorderFactory.createTitledBorder("Entrada"));
         java.awt.GridBagLayout pnlEntradaLayout = new java.awt.GridBagLayout();
-        pnlEntradaLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
-        pnlEntradaLayout.rowHeights = new int[] {0, 5, 0};
+        pnlEntradaLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        pnlEntradaLayout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0};
         pnlEntrada.setLayout(pnlEntradaLayout);
 
         jLabel1.setText("Hora:");
@@ -108,11 +118,46 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
         gridBagConstraints.weightx = 0.1;
         pnlEntrada.add(spEntradaTolerancia, gridBagConstraints);
 
-        pnlEntradaMarcacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Marcación"));
-        java.awt.GridBagLayout pnlEntradaMarcacionLayout = new java.awt.GridBagLayout();
-        pnlEntradaMarcacionLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
-        pnlEntradaMarcacionLayout.rowHeights = new int[] {0};
-        pnlEntradaMarcacion.setLayout(pnlEntradaMarcacionLayout);
+        pnlEntradaMarcacion2.setBorder(javax.swing.BorderFactory.createTitledBorder("Límites para Falta"));
+        pnlEntradaMarcacion2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel6.setText("Desde:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlEntradaMarcacion2.add(jLabel6, gridBagConstraints);
+
+        spEntradaDesde1.setModel(new javax.swing.SpinnerDateModel());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlEntradaMarcacion2.add(spEntradaDesde1, gridBagConstraints);
+
+        jLabel9.setText("Hasta:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        pnlEntradaMarcacion2.add(jLabel9, gridBagConstraints);
+
+        spEntradaHasta1.setModel(new javax.swing.SpinnerDateModel());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlEntradaMarcacion2.add(spEntradaHasta1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        pnlEntrada.add(pnlEntradaMarcacion2, gridBagConstraints);
+
+        pnlEntradaMarcacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Límites para Tardanza"));
+        pnlEntradaMarcacion.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setText("Desde:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -122,27 +167,33 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
 
         spEntradaDesde.setModel(new javax.swing.SpinnerDateModel());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         pnlEntradaMarcacion.add(spEntradaDesde, gridBagConstraints);
 
         jLabel4.setText("Hasta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         pnlEntradaMarcacion.add(jLabel4, gridBagConstraints);
 
         spEntradaHasta.setModel(new javax.swing.SpinnerDateModel());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         pnlEntradaMarcacion.add(spEntradaHasta, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         pnlEntrada.add(pnlEntradaMarcacion, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -154,8 +205,8 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
 
         pnlEntrada1.setBorder(javax.swing.BorderFactory.createTitledBorder("Salida"));
         java.awt.GridBagLayout pnlEntrada1Layout = new java.awt.GridBagLayout();
-        pnlEntrada1Layout.columnWidths = new int[] {0, 5, 0, 5, 0};
-        pnlEntrada1Layout.rowHeights = new int[] {0, 5, 0};
+        pnlEntrada1Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
+        pnlEntrada1Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0};
         pnlEntrada1.setLayout(pnlEntrada1Layout);
 
         jLabel5.setText("Hora:");
@@ -172,7 +223,7 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         pnlEntrada1.add(spSalida, gridBagConstraints);
 
-        pnlEntradaMarcacion1.setBorder(javax.swing.BorderFactory.createTitledBorder("Marcación"));
+        pnlEntradaMarcacion1.setBorder(javax.swing.BorderFactory.createTitledBorder("Límites para Tardanza"));
         java.awt.GridBagLayout pnlEntradaMarcacion1Layout = new java.awt.GridBagLayout();
         pnlEntradaMarcacion1Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
         pnlEntradaMarcacion1Layout.rowHeights = new int[] {0};
@@ -192,31 +243,65 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
 
         jLabel8.setText("Hasta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         pnlEntradaMarcacion1.add(jLabel8, gridBagConstraints);
 
         spSalidaHasta.setModel(new javax.swing.SpinnerDateModel());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         pnlEntradaMarcacion1.add(spSalidaHasta, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         pnlEntrada1.add(pnlEntradaMarcacion1, gridBagConstraints);
 
         chkDiaSiguiente.setText("¿Día siguiente?");
         chkDiaSiguiente.setToolTipText("Este control sirve como referente para saber si la jornada del empleado pasa la medianoche");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         pnlEntrada1.add(chkDiaSiguiente, gridBagConstraints);
+
+        pnlEntradaMarcacion3.setBorder(javax.swing.BorderFactory.createTitledBorder("Límites para Falta"));
+        pnlEntradaMarcacion3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel10.setText("Desde:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        pnlEntradaMarcacion3.add(jLabel10, gridBagConstraints);
+
+        spSalidaDesde1.setModel(new javax.swing.SpinnerDateModel());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        pnlEntradaMarcacion3.add(spSalidaDesde1, gridBagConstraints);
+
+        jLabel11.setText("Hasta:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        pnlEntradaMarcacion3.add(jLabel11, gridBagConstraints);
+
+        spSalidaHasta1.setModel(new javax.swing.SpinnerDateModel());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        pnlEntradaMarcacion3.add(spSalidaHasta1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        pnlEntrada1.add(pnlEntradaMarcacion3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -263,7 +348,7 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -350,25 +435,35 @@ public class DlgDetalleJornada extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel pnlEntrada;
     private javax.swing.JPanel pnlEntrada1;
     private javax.swing.JPanel pnlEntradaMarcacion;
     private javax.swing.JPanel pnlEntradaMarcacion1;
+    private javax.swing.JPanel pnlEntradaMarcacion2;
+    private javax.swing.JPanel pnlEntradaMarcacion3;
     private javax.swing.JSpinner spEntrada;
     private javax.swing.JSpinner spEntradaDesde;
+    private javax.swing.JSpinner spEntradaDesde1;
     private javax.swing.JSpinner spEntradaHasta;
+    private javax.swing.JSpinner spEntradaHasta1;
     private javax.swing.JSpinner spEntradaTolerancia;
     private javax.swing.JSpinner spSalida;
     private javax.swing.JSpinner spSalidaDesde;
+    private javax.swing.JSpinner spSalidaDesde1;
     private javax.swing.JSpinner spSalidaHasta;
+    private javax.swing.JSpinner spSalidaHasta1;
     // End of variables declaration//GEN-END:variables
 
     private void inicializar() {

@@ -554,6 +554,8 @@ public class VistaMarcaciones extends javax.swing.JInternalFrame {
 
                 tblEmpleado.packAll();
                 JOptionPane.showMessageDialog(this, "Busqueda finalizada", "Mensaje del sistema", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(this, "No se encontraron datos", "Mensaje del sistema", JOptionPane.ERROR_MESSAGE);
             }
         }
 

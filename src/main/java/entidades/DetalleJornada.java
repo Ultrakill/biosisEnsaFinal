@@ -62,6 +62,14 @@ public class DetalleJornada implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date salidaHasta;
     
+    @Column(name = "falta_desde")
+    @Temporal(TemporalType.TIME)
+    private Date faltaDesde;
+    
+    @Column(name = "falta_hasta")
+    @Temporal(TemporalType.TIME)
+    private Date faltaHasta;
+    
     @Column(name = "dtjorn_salida_dia_siguiente")
     private boolean salidaDiaSiguiente;
     
@@ -89,6 +97,23 @@ public class DetalleJornada implements Serializable {
         return entradaDesde;
     }
 
+    public Date getFaltaDesde() {
+        return faltaDesde;
+    }
+
+    public void setFaltaDesde(Date faltaDesde) {
+        this.faltaDesde = faltaDesde;
+    }
+
+    public Date getFaltaHasta() {
+        return faltaHasta;
+    }
+
+    public void setFaltaHasta(Date faltaHasta) {
+        this.faltaHasta = faltaHasta;
+    }
+    
+    
     public void setEntradaDesde(Date entradaDesde) {
         this.entradaDesde = entradaDesde;
     }
